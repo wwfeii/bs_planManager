@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+			
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>com.edu.wf.*</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">false</prop>
+                <!-- cache -->
+                <!--代表是否使用查询缓存，这里不使用，因为一般而言查询缓存的命中率并不是很高，所以我们没有 必要为每一个用户的查询缓存它的数据，所以这里设为false-->
+                <prop key="hibernate.cache.use_query_cache">false</prop>
+                <!--代表使用Hibernate的二级缓存-->
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                <!-- create db table -->
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">  
+        <property name="sessionFactory" ref="sessionFactory"></property>  
+    </bean>  
+</beans>
