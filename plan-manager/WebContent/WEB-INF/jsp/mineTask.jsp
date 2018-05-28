@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/plan-manager/css/modules/code.css">
     <link rel="stylesheet" href="/plan-manager/css/base.css">
     <link rel="stylesheet" href="/plan-manager/css/index.css">
-    <title>用户管理</title>
+    <title>我的任务</title>
 </head>
 <body>
 <!--ä¸­é´ççå­-->
@@ -92,7 +92,7 @@
 </div>
 <!--åå°ç®¡çç»æ-->
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script>
+<script src="/plan-manager/js/form.js"></script>
 <script src="/plan-manager/js/layui.all.js"></script>
 <script src="/plan-manager/js/mineTask.js"></script>
 </body>

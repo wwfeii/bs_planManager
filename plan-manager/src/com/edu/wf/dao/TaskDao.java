@@ -13,4 +13,6 @@ public interface TaskDao extends BaseDao<Task>{
 
 	List<Task> getCurrentUserTasks();
 
+	List<Task> getCurrentUserAllTasks(Long userId);
+
 }

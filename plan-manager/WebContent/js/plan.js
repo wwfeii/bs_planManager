@@ -8,9 +8,9 @@ $(function(){
 		$.ajax({
 			type:"POST",
 			async:false,
-			data:{'planStatus':radio},
+			data:{'planStatus':radio,'searchVal':searchVal},
 			dataType:"json",
-			url:"/plan-manager/plan/getJson.action?searchVal="+searchVal,
+			url:"/plan-manager/plan/getJson.action",
 			success:function(data){
 				var json=eval(data);
     			var trVal = "";
@@ -33,6 +33,7 @@ $(function(){
 				}
 		})
 	})
+	
 	
     
 	//totalNum = ${requestScope.total};
@@ -97,9 +98,9 @@ $(function(){
     		$.ajax({
     			type:"POST",
     			async:false,
-        		data:{'planStatus':redioVal},
+        		data:{'planStatus':redioVal,'searchVal':searchVal},
         		dataType:"json",
-        		url:"/plan-manager/plan/getJson.action?searchVal="+searchVal,
+        		url:"/plan-manager/plan/getJson.action",
         		success:function(data){
         			var json=eval(data);
         			var trVal = "";
@@ -125,44 +126,68 @@ $(function(){
         
         form.on('submit(formDemo)', function(data){
         	$("#planForm").submit();
-            return false;
+        	//用ajax序列化表单的方式提交
         });
         //打回
         form.on('submit(callbackForm)',function(data){
-        	$('#callBackForm').ajaxSubmit({
-        		url: 'http://localhost:8080/plan-manager/processs/callback.action',  
-  	             type: 'post',
-  	             async:false,
-  	             dataType: 'json',  
-  	             beforeSubmit: function () {},  
-  	             success: function (data){
-  	            	var resData = eval(data)
-   	            	var trVal = "";
-   		             if(resData.code == 200){
-   		            	 var json = resData.data;
-   		            	$.each(json,function(index,plan){
-   	        				var planId=json[index].planId;
-   	        				var planName = json[index].planName;
-   	        				var projectName = json[index].projectName;
-   	        				var planLeaderName = json[index].planLeaderName;
-   	        				var planStatus = json[index].planStatus;
-   	        				var taskTotalNum = json[index].taskTotalNum;
-   	        				var taskDisFinishNum = json[index].taskDisFinishNum;
-   	        				var taskFinishNum = json[index].taskFinishNum;
-   	        				var creatorName = json[index].creatorName;
-   	        				
-   	        				trVal +=  "<tr><td><input type='checkbox' value='"+planId+"'></td> <td>"+planName+"</td><td>"+planStatus+"</td><td>"+planLeaderName+"</td><td>"+projectName+"</td><td>"+taskTotalNum+"</td>" +
-   	        						"<td>"+taskDisFinishNum+"</td><td>"+taskFinishNum+"</td><td>"+creatorName+"</td></tr>";
-   	        			});
-   	        			$("#planTbody").html("");
-   	        			$("#planTbody").html(trVal);
-   		            	layer.closeAll();
-   		            	
-   		             }else if(resData.code == 500){
-   		            	$('#errorMsg').text(resData.msg);
-   		             }
-  	             }
+        	
+        	var planId = $("#bPlanId").val();
+        	
+        	//校验当前用户是否有操作权限
+        	$.ajax({
+        		url: 'http://localhost:8080/plan-manager/plan/callbackAuth.action?planId='+planId,  
+ 	             type: 'get',
+ 	             async:false,
+ 	             dataType: 'json',  
+ 	             beforeSubmit: function () {},  
+ 	             success: function (data){
+ 	            	 var resData = eval(data);
+ 	            	 if(resData.code == 200){
+ 	            		$('#callBackForm').ajaxSubmit({
+ 	               		url: 'http://localhost:8080/plan-manager/processs/callback.action',  
+ 	         	             type: 'post',
+ 	         	             async:false,
+ 	         	             dataType: 'json',  
+ 	         	             beforeSubmit: function () {},  
+ 	         	             success: function (data){
+ 	         	            	var resData = eval(data)
+ 	          	            	var trVal = "";
+ 	          		             if(resData.code == 200){
+ 	          		            	 var json = resData.data;
+ 	          		            	$.each(json,function(index,plan){
+ 	          	        				var planId=json[index].planId;
+ 	          	        				var planName = json[index].planName;
+ 	          	        				var projectName = json[index].projectName;
+ 	          	        				var planLeaderName = json[index].planLeaderName;
+ 	          	        				var planStatus = json[index].planStatus;
+ 	          	        				var taskTotalNum = json[index].taskTotalNum;
+ 	          	        				var taskDisFinishNum = json[index].taskDisFinishNum;
+ 	          	        				var taskFinishNum = json[index].taskFinishNum;
+ 	          	        				var creatorName = json[index].creatorName;
+ 	          	        				
+ 	          	        				trVal +=  "<tr><td><input type='checkbox' value='"+planId+"'></td> <td>"+planName+"</td><td>"+planStatus+"</td><td>"+planLeaderName+"</td><td>"+projectName+"</td><td>"+taskTotalNum+"</td>" +
+ 	          	        						"<td>"+taskDisFinishNum+"</td><td>"+taskFinishNum+"</td><td>"+creatorName+"</td></tr>";
+ 	          	        			});
+ 	          	        			$("#planTbody").html("");
+ 	          	        			$("#planTbody").html(trVal);
+ 	          		            	layer.closeAll();
+ 	          		            	
+ 	          		             }else if(resData.code == 500){
+ 	          		            	alert(resData.msg);
+ 	          		            	layer.closeAll();
+ 	          		             }
+ 	         	             }
+ 	               	})
+ 	            	 }else{
+ 	            		 alert(resData.msg);
+ 	            		 return;
+ 	            	 }
+ 	             }
         	})
+        	
+        	
+        	
+        	
         })
         
         //审核
@@ -226,7 +251,7 @@ $(function(){
             	   alert("一次只能审核一条");
             	   return;
                }
-               var id = ids[0];
+               var id = ids;
                layer.open({
                    type: 1,
                    title: '确认打回',
@@ -234,7 +259,7 @@ $(function(){
                    area: ['400px', '250px'],
                    shadeClose: true, //点击遮罩关闭
                    content: '<form id="callBackForm" class="layui-form" action="">\n' +
-                   '<input type="hidden" name="bussnessId" value="'+id+'"/>'+
+                   '<input type="hidden" id="bPlanId" name="bussnessId" value="'+id+'"/>'+
                 	   '<div class="layui-form-item layui-form-text">\n' +
    			    	'    <label class="layui-form-label w20">打回原因:</label>\n' +
    			    	'    <div class="layui-input-block">\n' +
@@ -264,81 +289,99 @@ $(function(){
            	   alert("一次只能审核一条");
            	   return;
               }
-              var id = ids[0];
+              var id = ids;
+              //验证当前人是否有审核权限
               $.ajax({
             	  type:"GET",
             	  async:false,
-            	  url:"http://localhost:8080/plan-manager/processs/getCheckInfo.action?businessId="+id+"&nodeType=typePlan",
+            	  url:"http://localhost:8080/plan-manager/plan/checkAuth.action?planId="+id,
             	  data:{},
             	  dataType:"json",
-            	  success:function(data){//需要的数据   当前流程名 -- 下一步流程名：审核人list  上一步意见     
-            		  var checkInfo = eval(data);
-            		  var currentProcessNodeName = checkInfo.currentProcessNodeName;
-            		  var nextProcessNodeName = checkInfo.nextProcessNodeName;
-            		  var isFinish = false;
-            		  if(nextProcessNodeName == "结束"){//表示当前就已经是结束了
-            			  isFinish = true;
+            	  success:function(data){
+            		  var resData = eval(data);
+            		  if(resData.code == 200){
+            			  $.ajax({
+                        	  type:"GET",
+                        	  async:false,
+                        	  url:"http://localhost:8080/plan-manager/processs/getCheckInfo.action?businessId="+id+"&nodeType=typePlan",
+                        	  data:{},
+                        	  dataType:"json",
+                        	  success:function(data){//需要的数据   当前流程名 -- 下一步流程名：审核人list  上一步意见     
+                        		  var checkInfo = eval(data);
+                        		  var currentProcessNodeName = checkInfo.currentProcessNodeName;
+                        		  var nextProcessNodeName = checkInfo.nextProcessNodeName;
+                        		  var isFinish = false;
+                        		  if(nextProcessNodeName == "结束"){//表示当前就已经是结束了
+                        			  isFinish = true;
+                        		  }
+                        		  var preCheckInfo = checkInfo.preCheckInfo;
+                        		  if(preCheckInfo == "" || preCheckInfo == null){
+                        			  preCheckInfo = "这是第一步，没有上一步的审核意见！"
+                        		  }
+                        		  var checkUsers = checkInfo.checkUsers;
+                        		  var trVal = "";
+                        		  $.each(checkUsers,function(index,user){
+                      				var userId=checkUsers[index].userId;
+                      				var userName = checkUsers[index].userName;
+                      				trVal+= "<option value='"+userId+"'>"+userName+"</option>";
+                      			});
+                        		  if(trVal == ""){
+                        			 trVal = "<option value=''>结束</option>";
+                        		  }
+                        		  layer.open({
+                        			    type: 1,
+                        			    title: '计划审核',
+                        			    scrollbar: false, shade: 0.5,
+                        			    area: ['550px', '500px'],
+                        			    shadeClose: true, //点击遮罩关闭
+                        			    content: '<form id="checkFormId" class="layui-form" action="">\n' +
+                        			    '<input type="hidden" name="bussnessId" value="'+id+'"/>'+
+                        			    '<input type="hidden" name="isFinish" value="'+isFinish+'"/>'+
+                        			    '<div class="layui-form-item">' +
+                        			    '      <label class="layui-form-label w20">当前步骤：</label>' +
+                        			    '      <div class="layui-form-mid layui-word-aux">'+currentProcessNodeName+'</div>' +
+                        			    '</div>'+
+                        			    '<div class="layui-form-item">' +
+                        			    '      <label class="layui-form-label w20">提下一步：</label>' +
+                        			    '      <div class="layui-form-mid layui-word-aux">'+nextProcessNodeName+'</div>' +
+                        			    '</div>'+
+                        			    '<div id="nextUserId" class="layui-form-item">\n' +
+                        			    '    <label class="layui-form-label w20">下一步审核人:</label>\n' +
+                        			    '    <div class="layui-input-block">\n' +
+                        			    '      <select name="checkId" lay-verify="required" style="display: inline-block;width: 80%;height: 36px;border-color:#e6e6e6">\n' +
+                        			    trVal +
+                        			    '      </select>\n' +
+                        			    '    </div>\n' +
+                        			    '</div>'+
+                        			    '<div class="layui-form-item layui-form-text">\n' +
+                        			    '    <label class="layui-form-label w20">上一步审核意见:</label>\n' +
+                        			    '    <div class="layui-input-block">\n' +
+                        			    '      <textarea name="desc" readonly placeholder="" style="width: 80%;color: #b7aeae;"  class="layui-textarea">'+preCheckInfo+'</textarea>\n' +
+                        			    '    </div>\n' +
+                        			    ' </div>'+
+                        			    '<div class="layui-form-item layui-form-text">\n' +
+                        			    '    <label class="layui-form-label w20">审核意见:</label>\n' +
+                        			    '    <div class="layui-input-block">\n' +
+                        			    '      <textarea name="checkInfo" placeholder="请输入审核意见" style="width: 80%;" class="layui-textarea"></textarea>\n' +
+                        			    '    </div>\n' +
+                        			    ' </div>'+
+                        			    '</form>'+
+                        			    '<span id="errorMsg"></span>'+
+                        			     '<div class="mar_t20 tc">' +
+                        			    '		<button class="layui-btn" lay-submit lay-filter="checkForm">提交审核</button>\n' +
+                        			    '      <a class="layui-btn layui-btn-primary cancer" style="margin-left: 20px;" onClick="layer.closeAll()">取消</a>' +
+                        			    ' </div>\''
+                        			});
+                        	  }
+                          })
+            		  }else{
+            			  alert(resData.msg);
+            			  return ;
             		  }
-            		  var preCheckInfo = checkInfo.preCheckInfo;
-            		  if(preCheckInfo == "" || preCheckInfo == null){
-            			  preCheckInfo = "这是第一步，没有上一步的审核意见！"
-            		  }
-            		  var checkUsers = checkInfo.checkUsers;
-            		  var trVal = "";
-            		  $.each(checkUsers,function(index,user){
-          				var userId=checkUsers[index].userId;
-          				var userName = checkUsers[index].userName;
-          				trVal+= "<option value='"+userId+"'>"+userName+"</option>";
-          			});
-            		  if(trVal == ""){
-            			 trVal = "<option value=''>结束</option>";
-            		  }
-            		  layer.open({
-            			    type: 1,
-            			    title: '计划审核',
-            			    scrollbar: false, shade: 0.5,
-            			    area: ['550px', '500px'],
-            			    shadeClose: true, //点击遮罩关闭
-            			    content: '<form id="checkFormId" class="layui-form" action="">\n' +
-            			    '<input type="hidden" name="bussnessId" value="'+id+'"/>'+
-            			    '<input type="hidden" name="isFinish" value="'+isFinish+'"/>'+
-            			    '<div class="layui-form-item">' +
-            			    '      <label class="layui-form-label w20">当前步骤：</label>' +
-            			    '      <div class="layui-form-mid layui-word-aux">'+currentProcessNodeName+'</div>' +
-            			    '</div>'+
-            			    '<div class="layui-form-item">' +
-            			    '      <label class="layui-form-label w20">提下一步：</label>' +
-            			    '      <div class="layui-form-mid layui-word-aux">'+nextProcessNodeName+'</div>' +
-            			    '</div>'+
-            			    '<div id="nextUserId" class="layui-form-item">\n' +
-            			    '    <label class="layui-form-label w20">下一步审核人:</label>\n' +
-            			    '    <div class="layui-input-block">\n' +
-            			    '      <select name="checkId" lay-verify="required" style="display: inline-block;width: 80%;height: 36px;border-color:#e6e6e6">\n' +
-            			    trVal +
-            			    '      </select>\n' +
-            			    '    </div>\n' +
-            			    '</div>'+
-            			    '<div class="layui-form-item layui-form-text">\n' +
-            			    '    <label class="layui-form-label w20">上一步审核意见:</label>\n' +
-            			    '    <div class="layui-input-block">\n' +
-            			    '      <textarea name="desc" readonly placeholder="" style="width: 80%;color: #b7aeae;"  class="layui-textarea">'+preCheckInfo+'</textarea>\n' +
-            			    '    </div>\n' +
-            			    ' </div>'+
-            			    '<div class="layui-form-item layui-form-text">\n' +
-            			    '    <label class="layui-form-label w20">审核意见:</label>\n' +
-            			    '    <div class="layui-input-block">\n' +
-            			    '      <textarea name="checkInfo" placeholder="请输入审核意见" style="width: 80%;" class="layui-textarea"></textarea>\n' +
-            			    '    </div>\n' +
-            			    ' </div>'+
-            			    '</form>'+
-            			    '<span id="errorMsg"></span>'+
-            			     '<div class="mar_t20 tc">' +
-            			    '		<button class="layui-btn" lay-submit lay-filter="checkForm">提交审核</button>\n' +
-            			    '      <a class="layui-btn layui-btn-primary cancer" style="margin-left: 20px;" onClick="layer.closeAll()">取消</a>' +
-            			    ' </div>\''
-            			});
             	  }
               })
+              
+             
         })
         
         // 新增
@@ -380,10 +423,11 @@ $(function(){
                                 area: ['600px', '360px'],
                                 shadeClose: true, //点击遮罩关闭
                                 content:'<form id="planForm" class="layui-form lay_form_padding20" method="POST" action="http://localhost:8080/plan-manager/plan/addPlan.action">\n' +
+                                '<span id="failMsg" style="margin-left: 90px;"></span>'+
                                 '  <div class="layui-form-item" style="margin-left: 90px;">\n' +
                                 '    <label class="layui-form-label">计划名称</label>\n' +
                                 '    <div class="layui-input-block">\n' +
-                                '      <input type="text" name="planName" required  lay-verify="required" placeholder="请输入计划名称" autocomplete="off" class="layui-input"  style="width: 56%;">\n' +
+                                '      <input type="text" name="planName" required id="planNameId"   lay-verify="required" placeholder="请输入计划名称" autocomplete="off" class="layui-input"  style="width: 56%;">\n' +
                                 '    </div>\n' +
                                 '  </div>\n' +
                                 ' \' <div class="layui-form-item" style="margin-left: 90px;">' +
@@ -404,7 +448,7 @@ $(function(){
                                 '  </div>'+
                                 '  <div class="layui-form-item mar_t40" style="margin-left: 90px;">\n' +
                                 '    <div class="layui-input-block">\n' +
-                                '      <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>\n' +
+                                '      <button class="layui-btn" lay-submit  lay-filter="formDemo">提交</button>\n' +
                                 '      <a class="layui-btn layui-btn-primary" onClick="layer.closeAll()">取消</a>\n' +
                                 '    </div>\n' +
                                 '  </div>\n' +
@@ -438,7 +482,7 @@ $(function(){
           	   alert("只能选择一条记录修改");
           	   return;
              }
-             var id = ids[0];
+             var id = ids;
              $.ajax({
           	   		type:"GET",
           	   		async:false,
@@ -502,11 +546,11 @@ $(function(){
 	    	    	                    	area: ['400px', '450px'],
 	    	    	                    	shadeClose: true, //点击遮罩关闭
 	    	    	                    	content: '<form id="updateForm" method="POST" class="layui-form" action="http://localhost:8080/plan-manager/plan/updatePlan.action">\n' +
-	    	    	                    	' <input type="hidden" name="planId" value="'+planId+'"/>\n'+
+	    	    	                    	' <input type="hidden" id="uplanId" name="planId" value="'+planId+'"/>\n'+
 	    	    	                    	'  <div class="layui-form-item">\n' +
 	    	    	                    	'    <label class="layui-form-label">计划名称</label>\n' +
 	    	    	                    	'    <div class="layui-input-block">\n' +
-	    	    	                    	'      <input type="text" value="'+planName+'" name="planName" required  lay-verify="required" placeholder="请输入计划名称" style="width: 80%" autocomplete="off" class="layui-input mar_t10">\n' +
+	    	    	                    	'      <input type="text" value="'+planName+'" name="planName" id="planNameId"  required  lay-verify="required" placeholder="请输入计划名称" style="width: 80%" autocomplete="off" class="layui-input mar_t10">\n' +
 	    	    	                    	'    </div>\n' +
 	    	    	                    	'  </div>\n' +
 	    	    	                    	'  <div class="layui-form-item">\n' +
@@ -561,18 +605,34 @@ $(function(){
           	   alert("请选择需要删除的记录");
           	   return;
              }
-            layer.open({
-                type: 1,
-                title: '确认删除',
-                scrollbar: false, shade: 0.5,
-                area: ['400px', '250px'],
-                shadeClose: true, //点击遮罩关闭
-                content: '<p class="tc mar_t40">确定要删除选中的数据吗？</p>'+
-                    '<div class="mar_t40 tc">'+
-                    '<a class="layui-btn layui-btn-primary que_ren" style="margin-right: 20px;">确认</a>'+
-                    '<a class="layui-btn layui-btn-primary cancer" style="margin-left: 20px;" onClick="layer.closeAll()">取消</a>'+
-                  '</div>'
-            });
+             //验证是否可以删除
+             $.ajax({
+            	 type:"GET",
+       	   			url:"http://localhost:8080/plan-manager/plan/checkPlanDelete.action",
+	           		data:{'ids':ids},
+	           		dataType:"json",
+	           		success:function(data){
+	           			var resData = eval(data);
+	           			if(resData.code == 200){
+	           				layer.open({
+	           	                type: 1,
+	           	                title: '确认删除',
+	           	                scrollbar: false, shade: 0.5,
+	           	                area: ['400px', '250px'],
+	           	                shadeClose: true, //点击遮罩关闭
+	           	                content: '<p class="tc mar_t40">确定要删除选中的数据吗？</p>'+
+	           	                    '<div class="mar_t40 tc">'+
+	           	                    '<a class="layui-btn layui-btn-primary que_ren" style="margin-right: 20px;">确认</a>'+
+	           	                    '<a class="layui-btn layui-btn-primary cancer" style="margin-left: 20px;" onClick="layer.closeAll()">取消</a>'+
+	           	                  '</div>'
+	           	            });
+	           			}else{
+	           				alert(resData.msg);
+	           				return ;
+	           			}
+	           		}
+             })
+            
         });
 
         $(document).on("click",".que_ren",function () {
@@ -604,6 +664,30 @@ $(function(){
 
 
 });
+
+function checkPlanName(){
+	var planNameVal = $("#planNameId").val();
+	var planId = $("#uplanId").val();
+	if(planId == null || planId == undefine){
+		planId="";
+	}
+	if(planNameVal == "" || planNameVal == null){
+		$("failMsg").html("计划名不能为空");
+		return ;
+	}
+	$.ajax({
+		type:"post",
+		data:{'planName':planNameVal,'planId':planId},
+		dataType:"json",
+		url:"/plan-manager/plan/checkPlanName.action",
+		success:function(data){
+			var resData = eval(data);
+			if(resData.code != 200){
+				$("failMsg").html(resData.msg);
+			}
+		}
+	})
+}
 
 
 

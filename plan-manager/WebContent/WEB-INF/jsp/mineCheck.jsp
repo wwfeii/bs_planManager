@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/plan-manager/css/modules/code.css">
     <link rel="stylesheet" href="/plan-manager/css/base.css">
     <link rel="stylesheet" href="/plan-manager/css/index.css">
-    <title>角色管理</title>
+    <title>我的审核</title>
 </head>
 <body>
 <!--ä¸­é´ççå­-->
@@ -26,55 +26,55 @@
                 <div class="layui-row">
                     <div class="layui-col-xs12 layui-col-md12">
                         <div class="layui-col-md4 layui-col-xs4">
-                            <form id="searchForm" class="layui-form mar_t20 search_box" action="">
+                            <form class="layui-form mar_t20 search_box" action="">
                                 <div class="layui-form-item">
-                                    <input id="searchVal" type="text" name="" placeholder="请输入角色名" autocomplete="off" class="layui-input fl">
-                                    <a id="searchBtn" class="layui-btn fl">搜索</a>
+                                	<input type="hidden" name="" id="type" value="${type}">
+                                    <input type="text" name=""   placeholder="请输入标题" autocomplete="off" class="layui-input fl">
+                                    <a class="layui-btn fl">搜索</a>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="layui-col-xs12 layui-col-md12">
                         <p class="kf">
-                            当前有 <i>${total}</i>个角色
-                            <button class="layui-btn layui-btn-primary " id="add_layer1">新增</button>
-                            <button class="layui-btn layui-btn-primary xiu_gai" id="update_layer">修改</button>
-                            <button class="layui-btn layui-btn-primary select_det">删除</button>
+                            当前有 <i>${total}</i>个审核
+                            <button class="layui-btn layui-btn-primary " id="checkBtn">审核</button>
+                            <c:if test="${type =='plan' }">
+                            	<button class="layui-btn layui-btn-primary " id="callBack">打回</button>
+                            </c:if>
                         </p>
                     </div>
                     <div class="layui-col-xs12 layui-col-md12 padding_l_r20 table1">
                         <table class="layui-table ">
                             <colgroup>
-                                <col width="100">
+                            	<col width="60">
+                                <col width="250">
                                 <col width="100">
                                 <col width="150">
-                                <col width="320">
-                                <col width="120">
                                 <col width="150">
                             </colgroup>
                             <thead>
                             <tr>
-                                <th>选择框</th>
-                                <th>序号</th>
-                                <th>角色名</th>
-                                <th>角色描述</th>
-                                <th>创建人</th>
+                            	<th>选择框</th>
+                                <th>信息名</th>
+                                <th>负责人</th>
+                                <th>信息状态</th>
                                 <th>创建时间</th>
                             </tr>
                             </thead>
-                            <tbody id="roleTbody">
-                            <c:forEach var="role" items="${roles}">
+                            <tbody id="mineCheckTbody">
+                            <c:forEach var="check" items="${checks}">
                             <tr>
                                 <td>
-                                    <input type="checkbox" value="${role.roleId }" name="" >
+                                    <input type="checkbox" value="${check.infoId }" name="" >
                                 </td>
-                                <td>${role.roleId }</td>
-                                <td>${role.roleName }</td>
-                                <td>${role.roleDescription}</td>
-                                 <td>${role.creatorName }</td>
-                                 <td>${role.createdTime}</td>
+                                <td>${check.infoName }</td>
+                                <td>${check.loaderName }</td>
+                                <td>${check.infoState}</td>
+                                <td>${check.createTime}</td>
                             </tr>
                             </c:forEach>
+                            
                             </tbody>
                         </table>
                     </div>
@@ -85,10 +85,11 @@
         </div>
     </div>
 </div>
+<!--åå°ç®¡çç»æ-->
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="/plan-manager/js/form.js"></script>
 <script src="/plan-manager/js/layui.all.js"></script>
-<script src="/plan-manager/js/role.js"></script>
+<script src="/plan-manager/js/mineCheck.js"></script>
 </body>
 </html>
 

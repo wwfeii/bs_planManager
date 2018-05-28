@@ -169,7 +169,7 @@ $(function(){
           	   alert("只能选择一条记录修改");
           	   return;
              }
-             var id = ids[0];
+             var id = ids;
              $.ajax({
             	   type:"GET",
   	           		url:"http://localhost:8080/plan-manager/role/getRoleById.action?roleId="+id,//通过id 获得详情
@@ -182,7 +182,6 @@ $(function(){
   	    				var roleDescription = role.roleDescription;
   	    				var creatorName = role.creatorName;
   	    				var createdTime = role.createdTime;
-  	    				
   	    				layer.open({
   	    	            	type: 1,
   	    	            	title: '修改角色',
@@ -200,7 +199,7 @@ $(function(){
   	    	            	    ' <div class="layui-form-item layui-form-text">\n' +
   	    	            	'    <label class="layui-form-label">角色描述</label>\n' +
   	    	            	'    <div class="layui-input-block">\n' +
-  	    	            	'      <textarea name="roleDescription" value="'+roleDescription+'" placeholder="请输入内容" style="width: 80%;" class="layui-textarea"></textarea>\n' +
+  	    	            	'      <textarea name="roleDescription" id="roleDesId"  placeholder="请输入内容" style="width: 80%;" class="layui-textarea">'+roleDescription+'</textarea>\n' +
   	    	            	'    </div>\n' +
   	    	            	'  </div>'+
   	    	            	'<div class="layui-form-item">' +
@@ -218,6 +217,7 @@ $(function(){
   	    	            	' </div>\''
 
   	    	            });
+  	    				
   	    				
   	           		}
                })

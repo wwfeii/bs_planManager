@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.weaver.ast.Var;
 import org.hibernate.context.ThreadLocalSessionContext;
@@ -34,7 +36,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.dsna.util.images.ValidateCode;
 
+import com.edu.wf.dao.RoleDao;
 import com.edu.wf.domin.Plan;
+import com.edu.wf.domin.Role;
 import com.edu.wf.domin.User;
 import com.edu.wf.service.UserService;
 import com.edu.wf.utils.JsonUtils;
@@ -52,6 +56,8 @@ import com.edu.wf.utils.ThreadLocalSession;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired RoleDao roleDao;
 	
 	@Value("${USER_SESSION_ID}")
 	private String USER_SESSION_ID;//用户登陆session名
@@ -92,6 +98,19 @@ public class UserController {
 				}
 				//登陆成功后，将用户信息保存到session中
 				HttpSession session = request.getSession();
+				//讲用户角色 设置到session中，用于判断是否有查看页面的权限
+				Long roleId = user.getRoleId();
+				Role role = roleDao.getEntityById(roleId);
+				String roleName = "";
+				String dbRoleName = role.getRoleName();
+				if("管理员".equals(dbRoleName)){
+					roleName="all";
+				}else if("项目负责人".equals(dbRoleName) || "计划负责人".equals(dbRoleName) || "任务负责人".equals(dbRoleName)){
+					roleName = dbRoleName;
+				}else{//不是这几个角色 就没权限
+					roleName="notany";
+				}
+				session.setAttribute("roleName", roleName);
 				session.setAttribute("loginName", user.getUserName());//用于首页展示
 				session.setAttribute("USER_SESSION_ID", JsonUtils.toJson(user));//将用户信息保存到session中
 				session.setMaxInactiveInterval(1000*60*30);//设置session的过期时间是半小时

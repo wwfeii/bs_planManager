@@ -1,5 +1,6 @@
 package com.edu.wf.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,10 +127,20 @@ public class TaskServiceImpl implements TaskService{
 		Task task = taskDao.getEntityById(taskId);
 		//修改任务状态
 		task.setCheckInfo(checkDescription);
-		task.setTaskStatus(Task.STATUS_CHECK);
+		if(Task.STATUS_CHECK.equals(task.getTaskStatus())){
+			task.setTaskStatus(Task.STATUS_FINISH);
+		}else{
+			task.setTaskStatus(Task.STATUS_CHECK);
+		}
+		
 		taskDao.update(task);
-		List<Task> tasks = taskDao.getCurrentUserTasks();
-		return ResponseDataVo.ofSuccess(tasks);
+		//List<Task> tasks = taskDao.getCurrentUserTasks();
+		return ResponseDataVo.ofSuccess(new ArrayList());
+	}
+
+	@Override
+	public List<Task> getTasksByCurrentUser(Long userId) {
+		return taskDao.getCurrentUserAllTasks(userId);
 	}
 
 }

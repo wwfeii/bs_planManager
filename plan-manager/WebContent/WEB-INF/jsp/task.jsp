@@ -32,7 +32,8 @@
                                     <div class="layui-input-block select1">
                                         <select lay-filter="se" name="city" lay-verify="required">
                                         <option value="" selected="selected">-请选择计划-</option>
-                                        <c:forEach items="${plans}" var="plan">
+                                        <c:if test="${not empty plans }">
+                                        	<c:forEach items="${plans}" var="plan">
                                         	<c:choose>
                                         		<c:when test="${plan.planId eq newPlanId}">
                                         			<option selected="selected" value="${plan.planId}">${plan.planName}</option>
@@ -41,8 +42,9 @@
                                         			<option  value="${plan.planId}">${plan.planName}</option>
                                         		</c:otherwise>
                                         	</c:choose>
-                                        	
                                         </c:forEach>
+                                        </c:if>
+                                        
                                         </select>
                                     </div>
                                 </div>
@@ -73,7 +75,15 @@
                     </div>
                     <div class="layui-col-xs12 layui-col-md12">
                         <p class="kf">
-                            当前有 <i>${total}</i>个计划
+                        <c:choose>
+                        	<c:when test="${not empty taskTotaoNum }">
+                        		当前有 <i id="taskNum">${taskTotaoNum}</i>个任务
+                        	</c:when>
+                        	<c:otherwise>
+                        		当前有 <i id="taskNum">0</i>个任务
+                        	</c:otherwise>
+                        </c:choose>
+                            
                             <button class="layui-btn layui-btn-primary " id="add_layer1">新增</button>
                             <button class="layui-btn layui-btn-primary xiu_gai" id="update_layer">修改</button>
                             <button class="layui-btn layui-btn-primary select_det">删除</button>
@@ -82,7 +92,6 @@
                     <div class="layui-col-xs12 layui-col-md12 padding_l_r20 table1">
                         <table class="layui-table ">
                             <colgroup>
-                                <col width="60">
                                 <col width="60">
                                 <col width="100">
                                 <col width="200">
@@ -94,7 +103,6 @@
                             <thead>
                             <tr>
                                 <th>选择框</th>
-                                <th>序号</th>
                                 <th>任务标题</th>
                                 <th>任务描述</th>
                                 <th>任务状态</th>
@@ -111,7 +119,6 @@
                            		<td>
                                     <input type="checkbox" value="${task.taskId }" name="" >
                                 </td>
-                                <td>${(status.index)+1}</td>
                                 <td>${task.taskTitle }</td>
                                 <td>${task.taskDescription}</td>
                                 <td>${task.taskStatus}</td>
@@ -131,7 +138,7 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/plan-manager/js/jquery.min.js"></script>
 <script src="/plan-manager/js/layui.all.js"></script>
 <script src="http://localhost:8080/plan-manager/js/task.js"></script>
 </body>

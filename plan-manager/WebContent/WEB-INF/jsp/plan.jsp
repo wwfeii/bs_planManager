@@ -38,11 +38,23 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">状态 :</label>
                                     <div class="layui-input-block">
-                                    	<input  type="radio" name="planStatus"  value="全部" lay-filter="ra" title="全部" checked>
-                                        <input  type="radio" name="planStatus" value="新建" lay-filter="ra" title="新建">
-                                        <input type="radio" name="planStatus" value="审核中" lay-filter="ra" title="审核中">
-                                        <input type="radio" name="planStatus" value="进行中" lay-filter="ra" title="进行中">
-                                        <input type="radio" name="planStatus" value="已完成" lay-filter="ra" title="已完成">
+	                                    <c:choose>
+	                                    	<c:when test="${not empty flag}">
+		                                    	<!-- <input  type="radio" name="planStatus"  value="全部" lay-filter="ra" title="全部" checked>
+		                                        <input  type="radio" name="planStatus" value="新建" lay-filter="ra" title="新建">
+		                                        <input type="radio" name="planStatus" value="审核中" lay-filter="ra" title="审核中">
+		                                        <input type="radio" name="planStatus" value="进行中" lay-filter="ra" title="进行中"> 
+		                                        <input type="radio" name="planStatus" value="未完成" lay-filter="ra" title="未完成" checked>
+		                                        <input type="radio" name="planStatus" value="已完成" lay-filter="ra" title="已完成">-->
+	                                    	</c:when>
+	                                    	<c:otherwise>
+	                                    		<input  type="radio" name="planStatus"  value="全部" lay-filter="ra" title="全部" checked>
+		                                        <input  type="radio" name="planStatus" value="新建" lay-filter="ra" title="新建">
+		                                        <input type="radio" name="planStatus" value="审核中" lay-filter="ra" title="审核中">
+		                                        <input type="radio" name="planStatus" value="进行中" lay-filter="ra" title="进行中">
+		                                        <input type="radio" name="planStatus" value="已完成" lay-filter="ra" title="已完成">
+	                                    	</c:otherwise>
+	                                    </c:choose>
                                     </div>
                                 </div>
                             </form>
@@ -52,12 +64,20 @@
                     <div class="layui-col-xs12 layui-col-md12">
                         <p class="kf">
                             当前有 <i>${total}</i>个计划
-                            <button class="layui-btn layui-btn-primary " id="add_layer1">新增</button>
-                            <button class="layui-btn layui-btn-primary xiu_gai" id="update_layer">修改</button>
-                            <button class="layui-btn layui-btn-primary select_det">删除</button>
+                            <c:choose>
+                            	<c:when test="${not empty flag}">
+                            		<button class="layui-btn layui-btn-primary " id="check">审核</button>
+                            	</c:when>
+                            	<c:otherwise>
+                            		<button class="layui-btn layui-btn-primary " id="add_layer1">新增</button>
+		                            <button class="layui-btn layui-btn-primary xiu_gai" id="update_layer">修改</button>
+		                            <button class="layui-btn layui-btn-primary select_det">删除</button>
+		                            
+		                            <button class="layui-btn layui-btn-primary " id="check">审核</button>
+		                            <button class="layui-btn layui-btn-primary " id="callback">打回</button>
+                            	</c:otherwise>
+                            </c:choose>
                             
-                            <button class="layui-btn layui-btn-primary " id="check">审核</button>
-                            <button class="layui-btn layui-btn-primary " id="callback">打回</button>
                         </p>
                     </div>
                     <div class="layui-col-xs12 layui-col-md12 padding_l_r20 table1">
@@ -114,7 +134,7 @@
     </div>
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script>
+<script src="/plan-manager/js/form.js"></script>
 <script src="/plan-manager/js/layui.all.js"></script>
 <script src="/plan-manager/js/plan.js"></script>
 </body>

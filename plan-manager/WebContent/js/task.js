@@ -33,7 +33,7 @@ $(function(){
     				var planName = json[index].planName;
     				var creatorName = json[index].creatorName;
     				
-    				trVal +=  "<tr><td><input type='checkbox' value='"+taskId+"'></td> <td>"+(index+1)+"</td><td>"+taskTitle+"</td><td>"+taskDescription+"</td><td>"+taskStatus+"</td><td>"+taskLeaderName+"</td>" +
+    				trVal +=  "<tr><td><input type='checkbox' value='"+taskId+"'></td><td>"+taskTitle+"</td><td>"+taskDescription+"</td><td>"+taskStatus+"</td><td>"+taskLeaderName+"</td>" +
     						"<td>"+planName+"</td><td>"+creatorName+"</td></tr>";
     			});
     			$("#taskTbody").html("");
@@ -77,7 +77,7 @@ $(function(){
 			                				var planName = json[index].planName;
 			                				var creatorName = json[index].creatorName;
 			                				
-			                				trVal +=  "<tr><td><input type='checkbox' value='"+taskId+"'></td> <td>"+(index+1)+"</td><td>"+taskTitle+"</td><td>"+taskDescription+"</td><td>"+taskStatus+"</td><td>"+taskLeaderName+"</td>" +
+			                				trVal +=  "<tr><td><input type='checkbox' value='"+taskId+"'></td> <td>"+taskTitle+"</td><td>"+taskDescription+"</td><td>"+taskStatus+"</td><td>"+taskLeaderName+"</td>" +
 			                						"<td>"+planName+"</td><td>"+creatorName+"</td></tr>";
 			                			});
 			                			$("#taskTbody").html("");
@@ -109,6 +109,8 @@ $(function(){
         		url:"/plan-manager/plan/getTaskJson.action?planId="+val,
         		success:function(data){
         			var json=eval(data);
+        			//设置任务数
+        			$("#taskNum").html(json.length);
         			var trVal = "";
         			var indexz = 0;
         			$.each(json,function(index,task){
@@ -120,7 +122,7 @@ $(function(){
         				var planName = json[index].planName;
         				var creatorName = json[index].creatorName;
         				
-        				trVal +=  "<tr><td><input type='checkbox' value='"+taskId+"'></td> <td>"+(index+1)+"</td><td>"+taskTitle+"</td><td>"+taskDescription+"</td><td>"+taskStatus+"</td><td>"+taskLeaderName+"</td>" +
+        				trVal +=  "<tr><td><input type='checkbox' value='"+taskId+"'></td> <td>"+taskTitle+"</td><td>"+taskDescription+"</td><td>"+taskStatus+"</td><td>"+taskLeaderName+"</td>" +
         						"<td>"+planName+"</td><td>"+creatorName+"</td></tr>";
         			});
         			$("#taskTbody").html("");
@@ -151,7 +153,7 @@ $(function(){
         				var planName = json[index].planName;
         				var creatorName = json[index].creatorName;
         				
-        				trVal +=  "<tr><td><input type='checkbox' value='"+taskId+"'></td> <td>"+(index+1)+"</td><td>"+taskTitle+"</td><td>"+taskDescription+"</td><td>"+taskStatus+"</td><td>"+taskLeaderName+"</td>" +
+        				trVal +=  "<tr><td><input type='checkbox' value='"+taskId+"'></td> <td>"+taskTitle+"</td><td>"+taskDescription+"</td><td>"+taskStatus+"</td><td>"+taskLeaderName+"</td>" +
         						"<td>"+planName+"</td><td>"+creatorName+"</td></tr>";
         			});
         			$("#taskTbody").html("");
@@ -258,7 +260,8 @@ $(function(){
          	   alert("只能选择一条记录修改");
          	   return;
             }
-            var id = ids[0];
+            var id = ids;
+            alert(id)
             $.ajax({
            	   type:"GET",
  	           		url:"http://localhost:8080/plan-manager/task/getTaskById.action?taskId="+id,//通过id 获得详情
@@ -278,7 +281,7 @@ $(function(){
  	    				//查询任务负责人列表
  	    				$.ajax({//发送ajax请求 获得所有该角色的用户
  	                		type:"GET",
- 	                		url:"http://localhost:8080/plan-manager/user/getUserByRoleId.action?roleId="+4,//任务负责人角色id为2
+ 	                		url:"http://localhost:8080/plan-manager/user/getUserByRoleId.action?roleId="+4,//任务负责人角色id为4
  	                		data:{},
  	                		dataType:"json",
  	                		success:function(data){

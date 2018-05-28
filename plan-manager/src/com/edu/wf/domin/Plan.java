@@ -52,23 +52,15 @@ public class Plan extends BaseEntity{
 	
 	@Column(name="PLAN_LEADER_ID",length=50,nullable=false)
 	private Long planLeaderId;//计划负责人id 
-	
 	@Column(name="PLAN_LEADER_NAME",length=50,nullable=false)
 	private String planLeaderName;//计划负责人名称
-	
 	@Column(name="PLAN_STATUS",length=50,nullable=false)
 	private String planStatus;//计划当前状态
-	
-	//默认为1
 	@Column(name="PLAN_PROCESSNO",length=50,nullable=true)
 	private Integer planProcessNo = 1;//计划在流程中的顺序
 	
 	@Column(name="PROCESS_NEXT_USERID",length=50,nullable=true)
 	private Long processNextUserId;//计划的下一步负责人
-	
-	/**
-	 * 数量默认未0
-	 */
 	@Column(name="TASK_TOTAL_NUM",length=50,nullable=true)
 	private Integer taskTotalNum = 0;//总的任务数
 	
@@ -78,6 +70,7 @@ public class Plan extends BaseEntity{
 	@Column(name="TASK_FINISH_NUM",length=50,nullable=true)
 	private Integer taskFinishNum = 0;//已完成的任务数
 
+	
 	
 	public Long getProcessNextUserId() {
 		return processNextUserId;
@@ -183,6 +176,18 @@ public class Plan extends BaseEntity{
 	public Plan() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "Plan [planId=" + planId + ", planName=" + planName
+				+ ", projectId=" + projectId + ", projectName=" + projectName
+				+ ", planLeaderId=" + planLeaderId + ", planLeaderName="
+				+ planLeaderName + ", planStatus=" + planStatus
+				+ ", planProcessNo=" + planProcessNo + ", processNextUserId="
+				+ processNextUserId + ", taskTotalNum=" + taskTotalNum
+				+ ", taskDisFinishNum=" + taskDisFinishNum + ", taskFinishNum="
+				+ taskFinishNum + "]";
 	}
 	
 	

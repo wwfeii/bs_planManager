@@ -28,16 +28,16 @@ public class LoginInteceptor extends HandlerInterceptorAdapter{
 			HttpServletResponse response, Object handler) throws Exception {
 		HttpSession session = request.getSession();
 		String userInfo =(String)session.getAttribute("USER_SESSION_ID");
-//		if(StringUtils.isEmpty(userInfo)){
-//			//路径中包含这两个 就直接放行
-//			if(request.getRequestURI().contains("login") || request.getRequestURI().contains("getValidateImg")){
-//				return true;
-//			}
-//			logger.info("inteceptor 用户登陆拦截       uri="+request.getRequestURI());
-//			//转发到登陆页面
-//			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
-//			return false;
-//		}
+		if(StringUtils.isEmpty(userInfo)){
+			//路径中包含这两个 就直接放行
+			if(request.getRequestURI().contains("login") || request.getRequestURI().contains("getValidateImg")){
+				return true;
+			}
+			logger.info("inteceptor 用户登陆拦截       uri="+request.getRequestURI());
+			//转发到登陆页面
+			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+			return false;
+		}
 		//将用户登陆信息放入threadLocalSession中
 		User user = JsonUtils.fromJson(userInfo, User.class);
 		ThreadLocalSession.setUser(user);

@@ -71,4 +71,6 @@ public interface TaskService {
 	 */
 	public ResponseDataVo checkTask(Long taskId, String checkDescription);
 
+	public List<Task> getTasksByCurrentUser(Long userId);
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import com.edu.wf.domin.Plan;
 import com.edu.wf.domin.Task;
 import com.edu.wf.utils.PageResult;
+import com.edu.wf.vo.EchartsVo;
+import com.edu.wf.vo.ResponseDataVo;
 
 /**
  *@author wangfei
@@ -88,5 +90,27 @@ public interface PlanService {
 	 * @return
 	 */
 	public int getPlanNumByCurrentUser();
+
+	/**
+	 * 得到当前用户负责的计划 未完成的
+	 */
+	public List<Plan> getCurrentUserPlans();
+
+	/**
+	 * 得到当前所有审核通过的计划
+	 * @return
+	 */
+	public List<Plan> getCountPlans();
+
+	public List<EchartsVo> getStateTask(Long planId);
+
+	public boolean entityIsExist(String string, String planName,
+			String string2, Long planId);
+
+	public ResponseDataVo checkPlanDelete(String ids);
+
+	public ResponseDataVo checkAuth(Long planId);
+
+	public ResponseDataVo callbackAuth(Long planId);
 
 }

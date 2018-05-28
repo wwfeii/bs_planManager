@@ -35,5 +35,12 @@ public class TaskDaoImpl extends BaseDaoImpl<Task> implements TaskDao{
 		List list = hibernateTemplate.find("from Task where taskLeaderId="+userId+" and taskStatus != '"+Task.STATUS_FINISH+"'");
 		return list;
 	}
+	@Override
+	public List<Task> getCurrentUserAllTasks(Long userId) {
+		System.out.println("-=--=ffId"+userId);
+		List list = hibernateTemplate.find("from Task where taskLeaderId="+userId);
+		System.out.println(list.size());
+		return list;
+	}
 
 }

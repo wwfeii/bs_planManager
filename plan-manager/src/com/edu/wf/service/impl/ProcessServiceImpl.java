@@ -18,6 +18,7 @@ import com.edu.wf.service.ProcessService;
 import com.edu.wf.service.TaskService;
 import com.edu.wf.service.UserService;
 import com.edu.wf.utils.ThreadLocalSession;
+import com.edu.wf.vo.MineCheckVo;
 import com.edu.wf.vo.PlanCheckVo;
 import com.edu.wf.vo.ResponseDataVo;
 
@@ -57,10 +58,14 @@ public class ProcessServiceImpl implements ProcessService{
 				checkVo.setCheckUsers(users);
 			}
 			
-			
-			if(plan.getPlanProcessNo() != 1){//不是第一步时需要获取上一步审核意见
-				ProcessLog processLog = processDao.getProcessLogByBussnessId(bussnessId);
+			ProcessLog processLog = processDao.getProcessLogByBussnessId(bussnessId);
+			if(plan.getPlanProcessNo() != 1 && processLog!=null){//不是第一步时需要获取上一步审核意见
 				checkVo.setPreCheckInfo(processLog.getCheckInfo());
+			}
+			if(processLog!=null){
+				if(ProcessLog.TYPE_REPULSE.equals(processLog.getOperateType())){
+					checkVo.setPreCheckInfo(processLog.getCheckInfo());
+				}
 			}
 		}else{
 			
@@ -112,7 +117,7 @@ public class ProcessServiceImpl implements ProcessService{
 		processLog2.setBusinessId(businessId);
 		processLog2.setCheckInfo(checkInfo);
 		processLog2.setHandlearId(ThreadLocalSession.getUser().getUserId());
-		processLog2.setOperateType(ProcessLog.TYPE_CHECK);
+		processLog2.setOperateType(ProcessLog.TYPE_REPULSE);
 		processLogService.save(processLog2);
 		List<Plan> data = planService.getAll();
 		return ResponseDataVo.ofSuccess(data);
@@ -121,6 +126,14 @@ public class ProcessServiceImpl implements ProcessService{
 	public int getCheckNumByCurrentUser() {
 		int num = processDao.getCheckNumByCurrentUser();
 		return num;
+	}
+	@Override
+	public List<MineCheckVo> getMineCheck() {
+		List<MineCheckVo> list= processDao.getMineCheck();
+		if(list == null){
+			return new ArrayList<MineCheckVo>();
+		}
+		return list;
 	}
 
 

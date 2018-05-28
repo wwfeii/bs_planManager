@@ -15,6 +15,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name="TB_ROLE")
 public class Role extends BaseEntity{
+	/**
+	 * 审核角色
+	 */
+	public static final String ROLE_CHECK = "role_check";
+	/**
+	 * 负责人角色
+	 */
+	public static final String ROLE_LEADER = "role_leader";
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "ROLE_ID", length = 50, nullable = false)
@@ -23,6 +32,16 @@ public class Role extends BaseEntity{
 	private String roleName;//角色名
 	@Column(name = "ROLE_DESCRIPTION", length = 300, nullable = true)
 	private String roleDescription;//角色描述
+	@Column(name = "ROLE_Type", length = 300, nullable = true)
+	private  String roleType;//角色类型
+	
+	
+	public String getRoleType() {
+		return roleType;
+	}
+	public void setRoleType(String roleType) {
+		this.roleType = roleType;
+	}
 	public Long getRoleId() {
 		return roleId;
 	}

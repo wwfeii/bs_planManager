@@ -1,5 +1,8 @@
 package com.edu.wf.service;
 
+import java.util.List;
+
+import com.edu.wf.vo.MineCheckVo;
 import com.edu.wf.vo.PlanCheckVo;
 import com.edu.wf.vo.ResponseDataVo;
 
@@ -33,6 +36,15 @@ public interface ProcessService {
 	 */
 	public ResponseDataVo callback(Long businessId, String checkInfo);
 	
+	/**
+	 * 得到当前用户的审核数量
+	 * @return
+	 */
 	public int getCheckNumByCurrentUser();
+	/**
+	 * 当前用户审核的信息 -- 任务 或者计划
+	 * @return
+	 */
+	public List<MineCheckVo> getMineCheck();
 
 }

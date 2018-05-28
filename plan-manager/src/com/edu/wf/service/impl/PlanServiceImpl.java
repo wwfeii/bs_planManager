@@ -14,6 +14,8 @@ import com.edu.wf.service.ProjectService;
 import com.edu.wf.service.UserService;
 import com.edu.wf.utils.PageResult;
 import com.edu.wf.utils.ThreadLocalSession;
+import com.edu.wf.vo.EchartsVo;
+import com.edu.wf.vo.ResponseDataVo;
 
 /**
  *@author wangfei
@@ -94,6 +96,46 @@ public class PlanServiceImpl implements PlanService{
 	public int getPlanNumByCurrentUser() {
 		int num = planDao.getPlanNumByCurrentUser();
 		return num;
+	}
+
+	@Override
+	public List<Plan> getCurrentUserPlans() {
+		List<Plan> list = planDao.getCurrentUserPlans();
+		return list;
+	}
+
+	@Override
+	public List<Plan> getCountPlans() {
+		List<Plan> list = planDao.getCountPlans();
+		return list;
+	}
+
+	@Override
+	public List<EchartsVo> getStateTask(Long planId) {
+		List<EchartsVo> result= planDao.getStateTask(planId);
+		return result;
+	}
+
+	@Override
+	public boolean entityIsExist(String string, String planName,
+			String string2, Long planId) {
+		return planDao.getEntityByName(string, planName,string2,planId);
+	}
+
+	@Override
+	public ResponseDataVo checkPlanDelete(String ids) {
+		return planDao.checkPlanDelete(ids);
+	}
+
+	@Override
+	public ResponseDataVo checkAuth(Long planId) {
+		
+		return planDao.checkAuth(planId);
+	}
+
+	@Override
+	public ResponseDataVo callbackAuth(Long planId) {
+		return planDao.callbackAuth(planId);
 	}
 
 }

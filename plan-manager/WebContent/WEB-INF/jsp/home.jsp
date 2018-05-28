@@ -27,13 +27,13 @@
             <div class="main_right_top">
                 <div class="one fl">
                     <div class="index_one">
-                        <a href="${pageContext.request.contextPath}/task/getMineTasks.action"><img src="/plan-manager/images/index_1img.png"  class="mar_t20" alt=""></a>
+                        <a href="${pageContext.request.contextPath}/task/getMineTasks.action"><img src="/plan-manager/images/index_1img.png"  class="mar_t20" alt="我的任务"></a>
                         <p class="tc mar_t20">我的任务 <i class="font_red">${totalNum.taskNum }</i>个</p>
                     </div>
                 </div>
                 <div class="one fl">
                     <div class="index_two">
-                        <img src="/plan-manager/images/wei_wanc.png" class="mar_t20"  alt="">
+                        <a href="${pageContext.request.contextPath}/plan/getMinePlans.action"><img src="/plan-manager/images/wei_wanc.png" class="mar_t20"  alt="我的计划"></a>
                         <p class="tc mar_t20">我的计划 <i class="font_red">${totalNum.planNum}</i> 个</p>
 
                     </div>
@@ -42,13 +42,13 @@
             <div class="main_right_bottom">
                 <div class="one fl">
                     <div class="index_three">
-                        <img src="/plan-manager/images/shenhe.png" class="mar_t20"  alt="">
+                       <a href="${pageContext.request.contextPath}/project/getMineProject.action"><img src="/plan-manager/images/shenhe.png" class="mar_t20"  alt="我的项目"></a> 
                         <p class="tc mar_t20">我的项目<i class="font_red">${totalNum.projectNum}</i>个</p>
                     </div>
                 </div>
                 <div class="one fl">
                     <div class="index_four">
-                        <img src="/plan-manager/images/question.png" class="mar_t20"  alt="">
+                       <a href="${pageContext.request.contextPath}/processs/mineCheck.action"> <img src="/plan-manager/images/question.png" class="mar_t20"  alt="我的审核"></a>
                         <p class="tc mar_t20">我的审核 <i class="font_red">${totalNum.checkNum }</i> 个</p>
                     </div>
                 </div>

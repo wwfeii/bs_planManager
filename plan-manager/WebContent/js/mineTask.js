@@ -131,7 +131,7 @@ $(function(){
          	   alert("只能选择一条记录提交");
          	   return;
             }
-            var id = ids[0];
+            var id = ids;
         	$.ajax({
         		type:"GET",
         		url:"http://localhost:8080/plan-manager/task/getTaskCheckInfoById.action?taskId="+id,

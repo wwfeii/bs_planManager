@@ -18,6 +18,15 @@ import javax.persistence.Entity;
 @Table(name="TB_TASK")
 public class Task extends BaseEntity{
 	
+	@Override
+	public String toString() {
+		return "Task [taskId=" + taskId + ", taskTitle=" + taskTitle
+				+ ", taskDescription=" + taskDescription + ", taskStatus="
+				+ taskStatus + ", taskLeaderId=" + taskLeaderId
+				+ ", taskLeaderName=" + taskLeaderName + ", planName="
+				+ planName + ", planId=" + planId + ", checkInfo=" + checkInfo
+				+ "]";
+	}
 	public static final String STATUS_ALL="全部";
 	public static final String STATUS_CREATE="新建";
 	/**

@@ -5,14 +5,12 @@ $(function(){
 	$("#searchBtn").click(function(){//搜索事件
 		var radio = $('input[name="projectStatus"]:checked').val();//状态
 		var searchVal = $("#searchVal").val();
-		if(searchVal == ""){
-			return ;
-		}
+		
 		$.ajax({
 			type:"POST",
-			data:{'projectStatus':radio},
+			data:{'projectStatus':radio,'searchVal':searchVal},
 			dataType:"json",
-			url:"/plan-manager/project/getJson.action?searchVal="+searchVal,
+			url:"/plan-manager/project/getJson.action",
 			success:function(data){
 				var json=eval(data);
     			var trVal = "";
@@ -86,9 +84,9 @@ $(function(){
     		var redioVal = data.value//被点击的radio的value值
     		$.ajax({
     			type:"POST",
-        		data:{'projectStatus':redioVal},
+        		data:{'projectStatus':redioVal,'searchVal':searchVal},
         		dataType:"json",
-        		url:"/plan-manager/project/getJson.action?searchVal="+searchVal,
+        		url:"/plan-manager/project/getJson.action",
         		success:function(data){
         			var json=eval(data);
         			var trVal = "";
@@ -183,7 +181,7 @@ $(function(){
             	   alert("只能选择一条记录修改");
             	   return;
                }
-               var id = ids[0];
+               var id = ids;
                $.ajax({
             	   type:"GET",
 	           		url:"http://localhost:8080/plan-manager/project/getProjectById.action?projectId="+id,//通过id 获得详情

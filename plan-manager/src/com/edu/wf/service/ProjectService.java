@@ -77,4 +77,6 @@ public interface ProjectService {
 	 * @return
 	 */
 	public int getProjectNumByCurrentUser();
+
+	public List<Project> getMineProject();
 }

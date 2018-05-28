@@ -21,6 +21,9 @@ public class ProcessLogDaoImpl extends BaseDaoImpl<ProcessLog> implements Proces
 	@Override
 	public ProcessLog getLogsByBusinessId(Long businessId) {
 		List list = hibernateTemplate.find("from ProcessLog where businessId = "+businessId+" order by createdTime desc");
+		if(list == null || list.size()==0){
+			return null;
+		}
 		return (ProcessLog) list.get(0);
 	}
 

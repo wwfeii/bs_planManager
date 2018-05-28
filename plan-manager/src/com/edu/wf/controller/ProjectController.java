@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,8 @@ public class ProjectController {
 	private ProjectService projectService;
 	
 	private static final Integer PAGE_SIZE = 10;//默认pageSize=10  可在configuration.properties中改
+	
+	private static final Logger LOG = LoggerFactory.getLogger(ProjectController.class);
 	
 	/**
 	 * 添加项目
@@ -65,6 +69,7 @@ public class ProjectController {
 	public List getJson(@RequestParam(defaultValue="1",value="pageNum")Integer pageNum,
 			@RequestParam(defaultValue=Project.STATUS_ALL,value="projectStatus")String projectStatus,
 			@RequestParam(defaultValue="",value="searchVal")String searchVal){
+		LOG.info("进入getJson，参数projectStatus={},searchVal={}",projectStatus,searchVal);
 		PageResult result = projectService.getForPage(pageNum, PAGE_SIZE, projectStatus, searchVal);
 		return result.getList();
 		
@@ -128,6 +133,14 @@ public class ProjectController {
 	public Project getProjectById(@RequestParam("projectId") Long projectId){
 		Project project = projectService.getEntityById(projectId);
 		return project;
+	}
+	
+	@RequestMapping("/getMineProject")
+	public String getMineProject(HttpServletRequest request){
+		List<Project> list = projectService.getMineProject();
+		request.setAttribute("projects", list);
+		request.setAttribute("total", list.size());
+		return "forward:/page/project.action";
 	}
 
 }

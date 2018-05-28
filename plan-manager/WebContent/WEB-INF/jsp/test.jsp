@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/plan-manager/css/base.css">
     <script src="/plan-manager/js/login.js"></script>
 	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-	<script src="http://malsup.github.com/jquery.form.js"></script>
+	<script src="/plan-manager/js/form.js"></script>
 
 </head>
 <body>

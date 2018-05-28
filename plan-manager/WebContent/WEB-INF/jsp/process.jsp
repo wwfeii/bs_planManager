@@ -114,11 +114,9 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/plan-manager/js/jquery.min.js"></script>
 <script src="/plan-manager/js/layui.all.js"></script>
 <script src="/plan-manager/js/index.js"></script>
-</body>
-</html>
 
 <script type="text/javascript">
     $('.rz_lc .rz_line i.blue_color,.rz_lc .rz_line img').hover(function () {
@@ -268,7 +266,6 @@
 										}else{
 											roleVal += "<option  value='"+roleId+"'>"+roleName+"</option>";
 										}
-									
 								});
 
 								layer.open({
@@ -278,11 +275,11 @@
 							           area: ['500px', '360px'],
 							           shadeClose: true, 
 							           content:'<form method="POST" id="updateNodeForm" class="layui-form lay_form_padding20" action="http://localhost:8080/plan-manager/node/updateNode.action">\n' +
-										'<input type="hidden" name="nodeId" value="'+nroleId+'"'+
+										'<input type="hidden" value="'+nodeId+'" name="nodeId"/>'+
 							           '  <div class="layui-form-item">\n' +
 							           '    <label class="layui-form-label">节点顺序</label>\n' +
 							           '    <div class="layui-input-block">\n' +
-							           '      <input type="text" name="nodeName" value="'+nodeNo+'" required  lay-verify="required" placeholder="请输入节点顺序" autocomplete="off" class="layui-input">\n' +
+							           '      <input type="text" name="nodeNo" value="'+nodeNo+'" required  lay-verify="required" placeholder="请输入节点顺序" autocomplete="off" class="layui-input">\n' +
 							           '    </div>\n' +
 							           '</div>'+
 							           '  <div class="layui-form-item">\n' +
@@ -302,11 +299,10 @@
 							           '  <div class="layui-form-item mar_t40">\n' +
 							           '    <div class="layui-input-block">\n' +
 							           '      <button class="layui-btn" lay-submit lay-filter="updateForm">修改</button>\n' +
-							           '      <a class="layui-btn layui-btn-primary" onClick="layer.closeAll()">取消</a>\n' +
+							           '      <a class="layui-btn layui-btn-primary" onClick="layer.closeAll()">取消</a>\n' +
 							           '    </div>\n' +
 							           '  </div>\n' +
 							           '</form>'
-
 							       });
 								
 				   		}
@@ -316,3 +312,7 @@
 	  
    });
 </script>
+
+</body>
+</html>
+

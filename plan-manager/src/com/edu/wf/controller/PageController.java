@@ -73,6 +73,18 @@ public class PageController{
 	public String goMineTask() throws Exception{
 		return "mineTask";
 	}
+	@RequestMapping("/minePlan")
+	public String goMinePlan() throws Exception{
+		return "minePlan";
+	}
+	@RequestMapping("/mineCheck")
+	public String mineCheck() throws Exception{
+		return "mineCheck";
+	}
 
+	@RequestMapping("/count")
+	public String count() throws Exception{
+		return "count";
+	}
 
 }

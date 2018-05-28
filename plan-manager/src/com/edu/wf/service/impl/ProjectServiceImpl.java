@@ -81,4 +81,10 @@ public class ProjectServiceImpl implements ProjectService{
 		return num;
 	}
 
+	@Override
+	public List<Project> getMineProject() {
+		List<Project> list = projectDao.getProjectsByCurrentUser();
+		return list;
+	}
+
 }

@@ -28,4 +28,14 @@ public class ProjectDaoImpl extends BaseDaoImpl<Project> implements ProjectDao{
 		return 0;
 	}
 
+	@Override
+	public List<Project> getProjectsByCurrentUser() {
+		Long userId = ThreadLocalSession.getUser().getUserId();
+		List list = hibernateTemplate.find("from Project where projectLeaderId="+userId+" and projectStatus != '"+Project.STATUS_FINISH+"'");
+		if(list != null){
+			return list;
+		}
+		return null;
+	}
+
 }
